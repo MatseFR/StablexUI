@@ -279,11 +279,12 @@ class Scroll extends Widget{
     *
     */
     private function _beforeScroll(e:MouseEvent) : Void {
+		var obj:DisplayObject = cast e.target;
         //if clicked on bars
         if(
-            e.target == this.vBar || e.target == this.hBar
-            || (this.vBar != null && e.target == this.vBar.slider)
-            || (this.hBar != null && e.target == this.hBar.slider)
+            obj == this.vBar || obj == this.hBar
+            || (this.vBar != null && obj == this.vBar.slider)
+            || (this.hBar != null && obj == this.hBar.slider)
         ) return;
 
         this.addUniqueListener(ScrollEvent.BEFORE_SCROLL, this._startScroll);
