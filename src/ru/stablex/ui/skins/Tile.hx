@@ -24,8 +24,13 @@ class Tile extends Rect{
     */
     public var bitmapData (get_bitmapData,set_bitmapData) : BitmapData;
     private var _bitmapData : BitmapData = null;
+	public var scaleX:Float = 1;
+	public var scaleY:Float = 1;
     //should we use smoothing?
     public var smooth : Bool = false;
+	
+	public var xOffset:Float = 0;
+	public var yOffset:Float = 0;
 
 
     /**
@@ -55,9 +60,10 @@ class Tile extends Rect{
     override public function draw (w:Widget) : Void {
         var bmp : BitmapData = this._getBmp();
         var mx = new flash.geom.Matrix();
-
+		mx.scale(scaleX, scaleY);
+		
         #if !cpp
-            mx.translate(this.paddingLeft, this.paddingTop);
+            mx.translate(this.paddingLeft + xOffset, this.paddingTop + yOffset);
             w.graphics.beginBitmapFill(bmp, mx, true, this.smooth);
             super.draw(w);
             w.graphics.endFill();
@@ -84,10 +90,11 @@ class Tile extends Rect{
                     }
                     x += bmp.width;
                 }
-
+				super.draw(w);
             }else{
-                mx.translate(this.paddingLeft, this.paddingTop);
-                w.graphics.beginBitmapFill(bmp, null, true, this.smooth);
+                mx.translate(this.paddingLeft + xOffset, this.paddingTop + yOffset);
+                //w.graphics.beginBitmapFill(bmp, null, true, this.smooth);
+				w.graphics.beginBitmapFill(bmp, mx, true, this.smooth);
                 super.draw(w);
                 w.graphics.endFill();
             }
