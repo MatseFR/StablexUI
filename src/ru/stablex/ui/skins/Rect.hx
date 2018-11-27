@@ -55,24 +55,36 @@ class Rect extends Skin{
         if( this.border > 0 ){
             w.graphics.lineStyle(this.border, this.borderColor, this.borderAlpha);
         }
-
-        if( this.corners == null || this.corners.length == 0 ){
+		
+		var xOff:Float = 0;
+		var yOff:Float = 0;
+		
+		#if cpp
+		if (this.border % 2 > 0)
+		{
+			xOff = 0.5;
+			yOff = 0.5;
+		}
+		#end
+		
+		if( this.corners == null || this.corners.length == 0 ){
             w.graphics.drawRect(
-                this.paddingLeft,
-                this.paddingTop,
+                this.paddingLeft + xOff,
+                this.paddingTop + yOff,
                 width,
                 height
             );
         }else if( this.corners.length > 0 ){
             w.graphics.drawRoundRect(
-                this.paddingLeft,
-                this.paddingTop,
+                this.paddingLeft + xOff,
+                this.paddingTop + yOff,
                 width,
                 height,
                 this.corners[0],
                 (this.corners.length > 1 ? this.corners[1] : this.corners[0])
             );
         }
+		
     }//function draw()
 
 
