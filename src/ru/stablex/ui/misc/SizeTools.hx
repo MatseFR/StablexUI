@@ -21,7 +21,9 @@ class SizeTools {
             if( Std.is(obj, Widget) ){
                 return cast(obj, Widget).w;
             }else if( Std.is(obj, TextField) ){
-                return cast(obj, TextField).textWidth + 4;
+                //return cast(obj, TextField).textWidth + 4;
+				//return Math.fceil(cast(obj, TextField).textWidth) + 4;
+				return Math.fceil(cast(obj, TextField).width);
             }else{
                 return obj.width;
             }
@@ -36,7 +38,8 @@ class SizeTools {
         if( Std.is(obj, Widget) ){
             return cast(obj, Widget).h;
         }else if( Std.is(obj, TextField) ){
-            return cast(obj, TextField).textHeight + 4;
+            //return cast(obj, TextField).textHeight + 4;
+			return Math.fceil(cast(obj, TextField).textHeight) + 4;
         }else{
             return obj.height;
         }
