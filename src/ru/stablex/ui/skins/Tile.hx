@@ -68,36 +68,36 @@ class Tile extends Rect{
             super.draw(w);
             w.graphics.endFill();
         #else
-            if( (this.corners == null || this.corners.length == 0) && (w.w > bmp.width || w.h > bmp.height) ){
-                var x : Float = this.paddingLeft;
-                var y : Float = this.paddingTop;
-
-                while( x < w.w - this.paddingRight ){
-                    y = this.paddingTop;
-                    while( y < w.h - this.paddingBottom ){
-                        mx.identity();
-                        mx.translate(x, y);
-                        w.graphics.beginBitmapFill(bmp, mx, false, this.smooth);
-                        w.graphics.drawRect(
-                            x,
-                            y,
-                            (x + bmp.width < w.w - this.paddingRight ? bmp.width : w.w - this.paddingRight - x),
-                            (y + bmp.height < w.h - this.paddingBottom ? bmp.height : w.h - this.paddingBottom - y)
-                        );
-                        w.graphics.endFill();
-
-                        y += bmp.height;
-                    }
-                    x += bmp.width;
-                }
-				super.draw(w);
-            }else{
+            //if( (this.corners == null || this.corners.length == 0) && (w.w > bmp.width || w.h > bmp.height) ){
+                //var x : Float = this.paddingLeft;
+                //var y : Float = this.paddingTop;
+				//
+                //while( x < w.w - this.paddingRight ){
+                    //y = this.paddingTop;
+                    //while( y < w.h - this.paddingBottom ){
+                        //mx.identity();
+                        //mx.translate(x, y);
+                        //w.graphics.beginBitmapFill(bmp, mx, false, this.smooth);
+                        //w.graphics.drawRect(
+                            //x,
+                            //y,
+                            //(x + bmp.width < w.w - this.paddingRight ? bmp.width : w.w - this.paddingRight - x),
+                            //(y + bmp.height < w.h - this.paddingBottom ? bmp.height : w.h - this.paddingBottom - y)
+                        //);
+                        //w.graphics.endFill();
+						//
+                        //y += bmp.height;
+                    //}
+                    //x += bmp.width;
+                //}
+				//super.draw(w);
+            //}else{
                 mx.translate(this.paddingLeft + xOffset, this.paddingTop + yOffset);
                 //w.graphics.beginBitmapFill(bmp, null, true, this.smooth);
 				w.graphics.beginBitmapFill(bmp, mx, true, this.smooth);
                 super.draw(w);
                 w.graphics.endFill();
-            }
+            //}
         #end
     }//function draw()
 
