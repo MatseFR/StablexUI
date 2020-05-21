@@ -31,7 +31,20 @@ class Box extends Widget{
     * Horizontal: left, right, center. Vertical: top, bottom, middle.
     * Use any other value to cancel alignment
     */
-    public var align : String = 'center,middle';
+    public var align(default, set) : String = 'center,middle'; // modified by Matse on 21/05/2020 : now uses a setter
+	// ADDED by Matse on 21/05/2020
+	private function set_align(value:String):String
+	{
+		var alignments:Array<String> = value.split(",");
+		alignH = alignments[0];
+		alignV = alignments[1];
+		return align = value;
+	}
+	
+	public var alignH:String = 'center';
+	public var alignV:String = 'middle';
+	//\ADDED by Matse on 21/05/2020
+	
     //set size depending on content size
     public var autoSize (never, set) : Bool;
     //set width depending on content width
@@ -131,40 +144,63 @@ class Box extends Widget{
     *
     */
     @:noCompletion private function _calcWidth () : Float {
-        //if this is vertical box, set width = max child width
-        if( this.vertical ){
+        // ADDED by Matse on 21/05/2020
+		if (alignH == "")
+		{
+			var w:Float = this.paddingLeft;// + this.paddingRight;
+			var child:DisplayObject;
+			var childW:Float;
+			
+			for (i in 0...this.numChildren)
+			{
+				child = this.getChildAt(i);
+				if (child.visible)
+				{
+					childW = child.x + this._objWidth(child);
+					if (childW > w) w = childW;
+				}
+			}
+			
+			return w + this.paddingRight;
+		}
+		//\ADDED by Matse on 21/05/2020
+		else
+		{
+			if( this.vertical ){
+				//if this is vertical box, set width = max child width
+				var w      : Float = 0;
+				var child  : DisplayObject;
+				var childW : Float = 0;
 
-            var w      : Float = 0;
-            var child  : DisplayObject;
-            var childW : Float = 0;
+				for(i in 0...this.numChildren){
+					child = this.getChildAt(i);
+					if( child.visible ){
+						childW = this._objWidth(child);
+						if( childW > w ){
+							w = childW;
+						}
+					}
+				}
 
-            for(i in 0...this.numChildren){
-                child = this.getChildAt(i);
-                if( child.visible ){
-                    childW = this._objWidth(child);
-                    if( childW > w ){
-                        w = childW;
-                    }
-                }
-            }
+				return w + this.paddingLeft + this.paddingRight;
+			
+			}else{
+				//if this is horizontal box set width = sum children width
+				var w : Float = this.paddingLeft + this.paddingRight;
+				var child : DisplayObject;
+				var visibleChildren : Int = 0;
 
-            return w + this.paddingLeft + this.paddingRight;
-        //if this is horizontal box set width = sum children width
-        }else{
-            var w : Float = this.paddingLeft + this.paddingRight;
-            var child : DisplayObject;
-            var visibleChildren : Int = 0;
+				for(i in 0...this.numChildren){
+					child = this.getChildAt(i);
+					if( child.visible ){
+						w += this._objWidth(child);
+						visibleChildren ++;
+					}
+				}
 
-            for(i in 0...this.numChildren){
-                child = this.getChildAt(i);
-                if( child.visible ){
-                    w += this._objWidth(child);
-                    visibleChildren ++;
-                }
-            }
-
-            return w + (visibleChildren - 1) * this.childPadding;
-        }
+				return w + (visibleChildren - 1) * this.childPadding;
+			}
+		}
     }//function _calcWidth()
 
 
@@ -173,42 +209,63 @@ class Box extends Widget{
     *
     */
     @:noCompletion private function _calcHeight () : Float {
-        //if this is vertical box, set height = sum child height
-        if( this.vertical ){
+        // ADDED by Matse on 21/05/2020
+		if (alignV == "")
+		{
+			var h:Float = this.paddingTop;// + this.paddingBottom;
+			var child:DisplayObject;
+			var childH:Float;
+			
+			for (i in 0...this.numChildren)
+			{
+				child = this.getChildAt(i);
+				if (child.visible)
+				{
+					childH = child.y + this._objHeight(child);
+					if (childH > h) h = childH;
+				}
+			}
+			
+			return h + this.paddingBottom;
+		}
+		//\ADDED by Matse on 21/05/2020
+		else
+		{
+			if( this.vertical ){
+				//if this is vertical box, set height = sum child height
+				var h : Float = this.paddingTop + this.paddingBottom;
+				var child : DisplayObject;
+				var visibleChildren : Int = 0;
 
-            var h : Float = this.paddingTop + this.paddingBottom;
-            var child : DisplayObject;
-            var visibleChildren : Int = 0;
+				for(i in 0...this.numChildren){
+					child = this.getChildAt(i);
+					if( child.visible ){
+						h += this._objHeight(child);
+						visibleChildren ++;
+					}
+				}
 
-            for(i in 0...this.numChildren){
-                child = this.getChildAt(i);
-                if( child.visible ){
-                    h += this._objHeight(child);
-                    visibleChildren ++;
-                }
-            }
+				return h + (visibleChildren - 1) * this.childPadding;
+				
+			}else{
+				//if this is horizontal box set height = max child height
+				var h      : Float = 0;
+				var childH : Float = 0;
+				var child  : DisplayObject;
 
-            return h + (visibleChildren - 1) * this.childPadding;
+				for(i in 0...this.numChildren){
+					child = this.getChildAt(i);
+					if( child.visible ){
+						childH = this._objHeight(child);
+						if( childH > h ){
+							h = childH;
+						}
+					}
+				}
 
-        //if this is horizontal box set height = max child height
-        }else{
-
-            var h      : Float = 0;
-            var childH : Float = 0;
-            var child  : DisplayObject;
-
-            for(i in 0...this.numChildren){
-                child = this.getChildAt(i);
-                if( child.visible ){
-                    childH = this._objHeight(child);
-                    if( childH > h ){
-                        h = childH;
-                    }
-                }
-            }
-
-            return h + this.paddingTop + this.paddingBottom;
-        }
+				return h + this.paddingTop + this.paddingBottom;
+			}
+		}
     }//function _calcHeight()
 
 
@@ -589,8 +646,8 @@ class Box extends Widget{
                     var child : Widget = (Std.is(e.currentTarget, Widget) ? cast(e.currentTarget, Widget) : null);
                     if(
                         child != null && child.visible != false
-                        && !(this.autoWidth && child._widthUsePercent)
-                        && !(this.autoHeight && child._heightUsePercent)
+                        //&& !(this.autoWidth && child._widthUsePercent) // removed by Matse on 21/05/2020
+                        //&& !(this.autoHeight && child._heightUsePercent) // removed by Matse on 21/05/2020
                     ){
                         this.refresh();
                     }
