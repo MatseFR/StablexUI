@@ -231,9 +231,10 @@ class Options extends Button{
     *
     */
     private function _onSelectOption (e:MouseEvent) : Void {
-        var obj : Button = cast e.currentTarget;
+        var obj : Toggle = cast e.currentTarget;
 
-        if( obj != null ){
+        if ( obj != null ){
+			obj.selected = true;
             var idx : Int = Std.parseInt(obj.name);
             if( this.options != null && this.options.length > idx ){
                 this._selectedIdx = idx;
