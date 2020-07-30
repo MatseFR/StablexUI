@@ -244,8 +244,15 @@ class Box extends Widget{
 						visibleChildren ++;
 					}
 				}
-
-				return h + (visibleChildren - 1) * this.childPadding;
+				
+				if (visibleChildren == 0)
+				{
+					return h;
+				}
+				else
+				{
+					return h + (visibleChildren - 1) * this.childPadding;
+				}
 				
 			}else{
 				//if this is horizontal box set height = max child height
