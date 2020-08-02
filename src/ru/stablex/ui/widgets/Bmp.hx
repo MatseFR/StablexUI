@@ -106,10 +106,24 @@ class Bmp extends Widget{
                 )
             ){
                 this.resize(bmp.width, bmp.height);
-            }else if( this.autoWidth && this._width != (this.drawPortion ? bmp.width - this.xOffset : bmp.width) ){
-                this.w = (this.drawPortion ? bmp.width - this.xOffset : bmp.width);
-            }else if( this.autoHeight && this._height != (this.drawPortion ? bmp.height - this.yOffset : bmp.height) ){
-                this.h = (this.drawPortion ? bmp.height - this.yOffset : bmp.height);
+            }else if ( this.autoWidth && this._width != (this.drawPortion ? bmp.width - this.xOffset : bmp.width) ){
+				if (keepAspect)
+				{
+					this.w = (this.drawPortion ? bmp.width - this.xOffset : bmp.width * (this._height / bmp.height));
+				}
+				else
+				{
+					this.w = (this.drawPortion ? bmp.width - this.xOffset : bmp.width);
+				}
+            }else if ( this.autoHeight && this._height != (this.drawPortion ? bmp.height - this.yOffset : bmp.height) ){
+				if (keepAspect)
+				{
+					this.h = (this.drawPortion ? bmp.height - this.yOffset : bmp.height * (this._width / bmp.width));
+				}
+				else
+				{
+					this.h = (this.drawPortion ? bmp.height - this.yOffset : bmp.height);
+				}
             }
 
             super.refresh();
