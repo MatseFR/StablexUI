@@ -107,7 +107,7 @@ class Bmp extends Widget{
             ){
                 this.resize(bmp.width, bmp.height);
             }else if ( this.autoWidth && this._width != (this.drawPortion ? bmp.width - this.xOffset : bmp.width) ){
-				if (keepAspect)
+				if (keepAspect && this._height != 0)
 				{
 					this.w = (this.drawPortion ? bmp.width - this.xOffset : bmp.width * (this._height / bmp.height));
 				}
@@ -116,7 +116,7 @@ class Bmp extends Widget{
 					this.w = (this.drawPortion ? bmp.width - this.xOffset : bmp.width);
 				}
             }else if ( this.autoHeight && this._height != (this.drawPortion ? bmp.height - this.yOffset : bmp.height) ){
-				if (keepAspect)
+				if (keepAspect && this._width != 0)
 				{
 					this.h = (this.drawPortion ? bmp.height - this.yOffset : bmp.height * (this._width / bmp.width));
 				}
