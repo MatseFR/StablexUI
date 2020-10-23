@@ -90,6 +90,7 @@ class Options extends Button{
     public function setOptionsSilently(options:Array<Array<Dynamic>>) : Void {
         this._skipNextChangeEvent = true;
         this.options = options;
+		this._skipNextChangeEvent = false;
     }
 
 
