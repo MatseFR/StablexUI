@@ -50,6 +50,106 @@ class Widget extends TweenSprite{
     @:noCompletion private var _width                   : Float = 0;
     @:noCompletion private var _widthPercent            : Float = 0;
     @:noCompletion private var _widthUsePercent         : Bool = false;
+	
+	
+	//##########################################################################################
+	// added by Matse on 10/11/2020 : minWidth/minHeight
+	//##########################################################################################
+	public var minWidth(get, set):Float;
+	public var minWidthPt(get, set):Float;
+	@:noCompletion private var _minWidth:Float = 0;
+	@:noCompletion private var _minWidthPercent:Float = 0;
+	@:noCompletion private var _minWidthUsePercent:Bool = false;
+	
+	public var minHeight(get, set):Float;
+	public var minHeightPt(get, set):Float;
+	@:noCompletion private var _minHeight:Float = 0;
+	@:noCompletion private var _minHeightPercent:Float = 0;
+	@:noCompletion private var _minHeightUsePercent:Bool = false;
+	
+	private function get_minWidth():Float { return this._minWidth; }
+	private function set_minWidth(value:Float):Float
+	{
+		this._minWidth = value;
+		if (this._width < this._minWidth)
+		{
+			this._width = this._minWidth;
+			if (!this._silentResize)
+			{
+				this._onResize();
+			}
+		}
+		return value;
+	}
+	
+	private function get_minWidthPt():Float
+	{
+		if (this._minWidthUsePercent) return this._minWidthPercent;
+		return 0;
+	}
+	private function set_minWidthPt(value:Float):Float
+	{
+		this._minWidthPercent = value;
+		this._minWidthUsePercent = true;
+		
+		if (this.wparent != null)
+		{
+			this._minWidth = this.wparent.contentWidth * value / 100;
+			if (this._width < this._minWidth)
+			{
+				this._width = this._minWidth;
+				if (!this._silentResize)
+				{
+					this._onResize();
+				}
+			}
+		}
+		return value;
+	}
+	
+	private function get_minHeight():Float { return this._minHeight; }
+	private function set_minHeight(value:Float):Float
+	{
+		this._minHeight = value;
+		if (this._height < this._minHeight)
+		{
+			this._height = this._minHeight;
+			if (!this._silentResize)
+			{
+				this._onResize();
+			}
+		}
+		return value;
+	}
+	
+	private function get_minHeightPt():Float
+	{
+		if (this._minHeightUsePercent) return this._minHeightPercent;
+		return 0;
+	}
+	private function set_minHeightPt(value:Float):Float
+	{
+		this._minHeightPercent = value;
+		this._minHeightUsePercent = true;
+		
+		if (this.wparent != null)
+		{
+			this._minHeight = this.wparent.contentHeight * value / 100;
+			if (this._height < this._minHeight)
+			{
+				this._height = this._minHeight;
+				if (!this._silentResize)
+				{
+					this._onResize();
+				}
+			}
+		}
+		return value;
+	}
+	//##########################################################################################
+	//\added by Matse on 10/11/2020
+	//##########################################################################################
+	
 
     //When widget width is set as % of parent's width and `minWidthByContent` is true, the widget will not shrink below its contentSize
     public var minWidthByContent = false;
@@ -294,7 +394,29 @@ class Widget extends TweenSprite{
         if( this._widthUsePercent || this._heightUsePercent ){
             this._resizeWithPercent(newParent);
         }
+		
+		
+		// added by Matse on 10/11/2020 : minWidth/minHeight
+		if (this._minWidthUsePercent || this._minHeightUsePercent)
+		{
+			var resizeNeeded:Bool = false;
+			if (this._minWidthUsePercent) this._minWidth = newParent.contentWidth * this._minWidthPercent / 100;
+			if (this._minHeightUsePercent) this._minHeight = newParent.contentHeight * this._minHeightPercent / 100;
+			if (this._width < this._minWidth)
+			{
+				this._width = this._minWidth;
+				resizeNeeded = true;
+			}
+			if (this._height < this._minHeight)
+			{
+				this._height = this._minHeight;
+				resizeNeeded = true;
+			}
+			if (resizeNeeded) this._onResize();
+		}
+		//\added by Matse on 10/11/2020
 
+		
         //positioning {
             switch ( this._xUse ) {
                 //by right border
@@ -331,6 +453,28 @@ class Widget extends TweenSprite{
         if( this._widthUsePercent || this._heightUsePercent ){
             this._resizeWithPercent(parent);
         }
+		
+		
+		// added by Matse on 10/11/2020 : minWidth/minHeight
+		if (this._minWidthUsePercent || this._minHeightUsePercent)
+		{
+			var resizeNeeded:Bool = false;
+			if (this._minWidthUsePercent) this._minWidth = parent.contentWidth * this._minWidthPercent / 100;
+			if (this._minHeightUsePercent) this._minHeight = parent.contentHeight * this._minHeightPercent / 100;
+			if (this._width < this._minWidth)
+			{
+				this._width = this._minWidth;
+				resizeNeeded = true;
+			}
+			if (this._height < this._minHeight)
+			{
+				this._height = this._minHeight;
+				resizeNeeded = true;
+			}
+			if (resizeNeeded) this._onResize();
+		}
+		//\added by Matse on 10/11/2020
+		
 
         //positioning {
             switch ( this._xUse ) {

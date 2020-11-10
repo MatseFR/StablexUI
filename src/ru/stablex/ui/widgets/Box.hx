@@ -126,6 +126,11 @@ class Box extends Widget{
             var w : Float = (this.autoWidth ? this._calcWidth() : this._width);
             var h : Float = (this.autoHeight ? this._calcHeight() : this._height);
 
+			
+			if (w < this._minWidth) w = this._minWidth;
+			if (h < this._minHeight) h = this._minHeight;
+			
+			
             if( this._width != w || this._height != h ){
                 this.resize(w, h, true);
             }
