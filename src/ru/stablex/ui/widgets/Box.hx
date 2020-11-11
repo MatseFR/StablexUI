@@ -596,8 +596,9 @@ class Box extends Widget{
         super.addChild(child);
         if( Std.is(child, Widget) ){
             cast(child, Widget).addUniqueListener(WidgetEvent.RESIZE, this._onChildResize);
-            this._onChildResize();
+            //this._onChildResize();
         }
+		this._onChildResize();
         return child;
     }//function addChild()
 
@@ -610,10 +611,100 @@ class Box extends Widget{
         super.addChildAt(child, idx);
         if( Std.is(child, Widget) ){
             cast(child, Widget).addUniqueListener(WidgetEvent.RESIZE, this._onChildResize);
-            this._onChildResize();
+            //this._onChildResize();
         }
+		this._onChildResize();
         return child;
     }//function addChildAt()
+	
+	//##########################################################################################
+	// Matse 11/11/2020 : new methods to avoid resizing/applying layout for every added child
+	//##########################################################################################
+	/**
+	   Add child without doing resize/layout stuff : call childrenAdded() afterwards
+	   
+	   @param	child
+	   @return
+	**/
+	public function addChildSilently(child:DisplayObject):DisplayObject
+	{
+		super.addChild(child);
+		if (Std.is(child, Widget))
+		{
+			cast(child, Widget).addUniqueListener(WidgetEvent.RESIZE, this._onChildResize);
+		}
+		return child;
+	}
+	
+	
+	/**
+	   Add child at specified index without doing resize/layout stuff : call chilrenAdded() afterwards
+	   
+	   @param	child
+	   @param	idx
+	   @return
+	**/
+	public function addChildAtSilently(child:DisplayObject, idx:Int):DisplayObject
+	{
+		super.addChildAt(child, idx);
+		if (Std.is(child, Widget))
+		{
+			cast(child, Widget).addUniqueListener(WidgetEvent.RESIZE, this._onChildResize);
+		}
+		return child;
+	}
+	
+	
+	/**
+	   Call this function after using addChildSilently or addChildAtSilently to trigger resize/layout stuff
+	**/
+	public function childrenAdded():Void
+	{
+		this._onChildResize();
+	}
+	
+	
+	/**
+	   Add all children in list and do resize/layout stuff afterwards
+	   
+	   @param	children
+	**/
+	public function addChildren(children:Array<DisplayObject>):Void
+	{
+		for (child in children)
+		{
+			super.addChild(child);
+			if (Std.is(child, Widget))
+			{
+				cast(child, Widget).addUniqueListener(WidgetEvent.RESIZE, this._onChildResize);
+			}
+		}
+		this._onChildResize();
+	}
+	
+	
+	/**
+	   Add all children in list from specified index and do resize stuff afterwards
+	   
+	   @param	children
+	   @param	idx
+	**/
+	public function addChildrenAt(children:Array<DisplayObject>, idx:Int):Void
+	{
+		for (child in children)
+		{
+			super.addChildAt(child, idx);
+			if (Std.is(child, Widget))
+			{
+				cast(child, Widget).addUniqueListener(WidgetEvent.RESIZE, this._onChildResize);
+			}
+			idx++;
+		}
+		this._onChildResize();
+	}
+	//##########################################################################################
+	//\Matse 11/11/2020 : new methods to avoid resizing/applying layout for every added child
+	//##########################################################################################
 
 
     /**
